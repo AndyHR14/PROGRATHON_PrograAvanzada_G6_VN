@@ -1,6 +1,19 @@
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using PROGRATHON.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDbContext<AppDbContext>(
+
+    options =>
+           options.UseMySQL(builder.Configuration.GetConnectionString("MySqlConnection"))
+
+    );
 
 var app = builder.Build();
 
