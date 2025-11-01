@@ -35,7 +35,7 @@ namespace PROGRATHON.Controllers
 
         //Post
         [HttpPost]
-        public async Task<IActionResult> Crear(UsuarioModel _Usuario)
+        public async Task<IActionResult> Crear(Usuario _Usuario)
         {
 
             if (ModelState.IsValid)
