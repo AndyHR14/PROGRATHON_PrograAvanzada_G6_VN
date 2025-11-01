@@ -1,0 +1,50 @@
+﻿@model PROGRATHON.Models.Laboratorio
+<h2>Formulario de Creacion</h2>
+
+<form asp-action="Crear">
+
+    <div class="mb-3">
+        <label for="" class="form-label">Nombre Lab</label>
+        <input type="text"
+               class="form-control"
+               asp-for="NombreLab"
+               aria-describedby="helpId"
+               placeholder="Ingre su Nombre" />
+        <small id="helpId" class="form-text text-muted">Help text Nombre</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="form-label">Capacidad</label>
+        <input type="number"
+               class="form-control"
+               asp-for="Capacidad"
+               aria-describedby="helpId"
+               placeholder="Ingrese su Correo" />
+        <small id="helpId" class="form-text text-muted">Help text Capacidad</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="form-label">Responsable</label>
+        <input type="text"
+               class="form-control"
+               asp-for="Responsable"
+               aria-describedby="helpId"
+               placeholder="Ingrese su Correo" />
+        <small id="helpId" class="form-text text-muted">Help text Correo</small>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Guardar
+    </button>
+    <button type="reset"
+            class="btn btn-danger">
+        Reset
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-warning">
+        Volver
+    </a>
+
+</form>

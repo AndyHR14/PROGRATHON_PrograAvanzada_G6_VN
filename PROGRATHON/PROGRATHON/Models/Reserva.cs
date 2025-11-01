@@ -9,5 +9,6 @@ namespace PROGRATHON.Models
         public int IDUsuario { get; set; }
         public int IDLab { get; set; }
         public DateTime FechaYHora { get; set; }
+        public bool Activa { get; set; } = true;
     }
 }
