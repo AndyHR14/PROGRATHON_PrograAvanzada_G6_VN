@@ -1,0 +1,40 @@
+﻿@model PROGRATHON.ViewModels.ReservaCreateVM
+
+@{
+    ViewData["Title"] = "Crear Reserva";
+}
+
+<h2>Crear Reserva</h2>
+
+<form asp-action="Crear" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="IDUsuario" class="form-label"></label>
+        <select asp-for="IDUsuario" asp-items="Model.Usuarios" class="form-select">
+            <option value="">-- Seleccione un usuario --</option>
+        </select>
+        <span asp-validation-for="IDUsuario" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="IDLab" class="form-label"></label>
+        <select asp-for="IDLab" asp-items="Model.Laboratorios" class="form-select">
+            <option value="">-- Seleccione un laboratorio --</option>
+        </select>
+        <span asp-validation-for="IDLab" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaYHora" class="form-label"></label>
+        <input asp-for="FechaYHora" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaYHora" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

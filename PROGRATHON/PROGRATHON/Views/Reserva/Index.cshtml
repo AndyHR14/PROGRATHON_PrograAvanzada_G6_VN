@@ -1,36 +1,43 @@
 ﻿@model IEnumerable<PROGRATHON.Models.Reserva>
 
-<h2>Laboratorio</h2>
-<a name=""
-   id=""
-   class="btn btn-primary"
-   asp-action="Crear"
-   role="button">Crear</a>
+@{
+    ViewData["Title"] = "Reservas";
+}
 
+<h2>Reservas</h2>
 
-<div class="table-responsive">
-    <table class="table table-primary">
-        <thead>
+<p>
+    <a class="btn btn-primary" asp-action="Crear">Nueva Reserva</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Laboratorio</th>
+            <th>Fecha y hora</th>
+            <th>Activa</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
             <tr>
-                <th scope="col">IDReserva</th>
-                <th scope="col">IDUsuario</th>
-                <th scope="col">IDLab</th>
-                <th scope="col">FechaYHora</th>
-                <th scope="col">Actividad</th>
+                <td>@r.Usuario?.NombreUsuario</td>
+                <td>@r.Laboratorio?.NombreLab</td>
+                <td>@r.FechaYHora.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(r.Activa ? "Sí" : "No")</td>
+                <td>
+                    @if (r.Activa)
+                    {
+                        <form asp-action="Cancelar" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@r.IDReserva" />
+                            <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
+                        </form>
+                    }
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Reserva itemDato in Model)
-
-                <tr class="">
-             
-                    <td>@itemDato.IDReserva</td>
-                    <td>@itemDato.IDUsuario</td>
-                    <td>@itemDato.IDLab</td>
-                    <td>@itemDato.FechaYHora</td>
-                <td>@itemDato.Activa</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
