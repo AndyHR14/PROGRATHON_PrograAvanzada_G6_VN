@@ -1,0 +1,36 @@
+﻿@model IEnumerable<PROGRATHON.Models.Reserva>
+
+<h2>Laboratorio</h2>
+<a name=""
+   id=""
+   class="btn btn-primary"
+   asp-action="Crear"
+   role="button">Crear</a>
+
+
+<div class="table-responsive">
+    <table class="table table-primary">
+        <thead>
+            <tr>
+                <th scope="col">IDReserva</th>
+                <th scope="col">IDUsuario</th>
+                <th scope="col">IDLab</th>
+                <th scope="col">FechaYHora</th>
+                <th scope="col">Actividad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Reserva itemDato in Model)
+
+                <tr class="">
+             
+                    <td>@itemDato.IDReserva</td>
+                    <td>@itemDato.IDUsuario</td>
+                    <td>@itemDato.IDLab</td>
+                    <td>@itemDato.FechaYHora</td>
+                <td>@itemDato.Activa</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
