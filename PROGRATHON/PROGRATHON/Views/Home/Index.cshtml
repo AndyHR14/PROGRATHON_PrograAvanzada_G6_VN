@@ -1,8 +1,70 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Sistema de Reservas de Laboratorios";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">Sistema de Reservas de Laboratorios</h1>
+        <p class="lead text-muted">
+            Administra los <strong>laboratorios</strong>, gestiona <strong>usuarios</strong> y controla las <strong>reservas activas</strong> de manera sencilla.
+        </p>
+    </div>
+
+    <!-- Tarjetas de navegación -->
+    <div class="row g-4 justify-content-center">
+        <!-- Módulo Usuarios -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-people display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Usuarios</h5>
+                    <p class="card-text text-muted">Gestiona los usuarios del sistema: estudiantes y profesores.</p>
+                    <a asp-controller="Usuario" asp-action="Index" class="btn btn-outline-primary w-100">
+                        Ir a Usuarios
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo Laboratorios -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-building-check display-4 text-success"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Laboratorios</h5>
+                    <p class="card-text text-muted">Registra y visualiza laboratorios con su capacidad y responsable.</p>
+                    <a asp-controller="Laboratorios" asp-action="Index" class="btn btn-outline-success w-100">
+                        Ir a Laboratorios
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo Reservas -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-calendar-check display-4 text-danger"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Reservas</h5>
+                    <p class="card-text text-muted">Crea, cancela o consulta reservas activas en los laboratorios.</p>
+                    <a asp-controller="Reserva" asp-action="Index" class="btn btn-outline-danger w-100">
+                        Ir a Reservas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección inferior con información -->
+    <div class="mt-5 text-center">
+        <p class="text-muted">
+            © @DateTime.Now.Year - PROGRATHON | Proyecto académico desarrollado en ASP.NET Core
+        </p>
+    </div>
 </div>

@@ -4,36 +4,71 @@
     ViewData["Title"] = "Crear Reserva";
 }
 
-<h2>Crear Reserva</h2>
-
-<form asp-action="Crear" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label asp-for="IDUsuario" class="form-label"></label>
-        <select asp-for="IDUsuario" asp-items="Model.Usuarios" class="form-select">
-            <option value="">-- Seleccione un usuario --</option>
-        </select>
-        <span asp-validation-for="IDUsuario" class="text-danger"></span>
+<div class="container mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="mb-0 text-primary">Nueva reserva</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="IDLab" class="form-label"></label>
-        <select asp-for="IDLab" asp-items="Model.Laboratorios" class="form-select">
-            <option value="">-- Seleccione un laboratorio --</option>
-        </select>
-        <span asp-validation-for="IDLab" class="text-danger"></span>
-    </div>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Crear" method="post" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-    <div class="mb-3">
-        <label asp-for="FechaYHora" class="form-label"></label>
-        <input asp-for="FechaYHora" type="datetime-local" class="form-control" />
-        <span asp-validation-for="FechaYHora" class="text-danger"></span>
-    </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="IDUsuario" class="form-label">Usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <select asp-for="IDUsuario" asp-items="Model.Usuarios" class="form-select">
+                                <option value="">-- Seleccione un usuario --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="IDUsuario" class="text-danger"></span>
+                    </div>
 
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+                    <div class="col-md-6">
+                        <label asp-for="IDLab" class="form-label">Laboratorio</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <select asp-for="IDLab" asp-items="Model.Laboratorios" class="form-select">
+                                <option value="">-- Seleccione un laboratorio --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="IDLab" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="FechaYHora" class="form-label">Fecha y hora</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                            <input asp-for="FechaYHora" type="datetime-local" class="form-control" />
+                        </div>
+                        <div class="form-text">Debe ser una fecha y hora futura.</div>
+                        <span asp-validation-for="FechaYHora" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0" role="alert">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Las reservas no pueden duplicar el mismo laboratorio en la misma fecha y hora.
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check2-circle me-1"></i> Guardar
+                    </button>
+                    <button type="reset" class="btn btn-outline-danger">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

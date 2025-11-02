@@ -1,6 +1,95 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Política de Privacidad y Uso del Sistema";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <h1 class="display-6 fw-bold text-primary">@ViewData["Title"]</h1>
+                <p class="text-muted">
+                    Última actualización: @DateTime.Now.ToString("dd 'de' MMMM 'de' yyyy")
+                </p>
+            </div>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">1. Introducción</h4>
+                <p class="text-muted">
+                    En el <strong>Sistema de Reservas de Laboratorios PROGRATHON</strong> respetamos y protegemos la privacidad de todos los usuarios.
+                    Esta política explica cómo se recopila, utiliza y protege la información personal
+                    dentro del sitio web y la aplicación de reservas.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">2. Información que recopilamos</h4>
+                <p class="text-muted">
+                    Solo se recopila la información necesaria para el funcionamiento del sistema, incluyendo:
+                </p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="bi bi-person text-primary me-2"></i> Nombre y correo electrónico del usuario.
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi bi-building text-success me-2"></i> Datos de los laboratorios (nombre, capacidad, responsable).
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi bi-calendar-event text-danger me-2"></i> Registros de reservas realizadas por los usuarios.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">3. Uso de la información</h4>
+                <p class="text-muted">
+                    La información recopilada se utiliza exclusivamente para:
+                </p>
+                <ul class="list-unstyled ms-3">
+                    <li>• Gestionar el acceso de usuarios.</li>
+                    <li>• Permitir la creación y administración de reservas.</li>
+                    <li>• Mejorar la experiencia del usuario en el sistema.</li>
+                </ul>
+                <p class="text-muted">
+                    No compartimos ni vendemos la información a terceros bajo ninguna circunstancia.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">4. Seguridad de los datos</h4>
+                <p class="text-muted">
+                    Implementamos medidas técnicas y organizativas razonables para proteger la información de los usuarios.
+                    Esto incluye acceso restringido, auditorías internas y políticas de contraseñas seguras.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">5. Derechos del usuario</h4>
+                <p class="text-muted">
+                    Los usuarios tienen derecho a acceder, modificar o eliminar sus datos personales.
+                    Para ejercer estos derechos, pueden comunicarse con el administrador del sistema.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">6. Uso responsable del sistema</h4>
+                <p class="text-muted">
+                    Los usuarios se comprometen a utilizar el sistema de forma ética y responsable, respetando las
+                    políticas institucionales y el correcto uso de los laboratorios.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h4 class="fw-semibold text-dark">7. Cambios en esta política</h4>
+                <p class="text-muted">
+                    Esta política puede actualizarse periódicamente. Las modificaciones se publicarán en esta misma página con su fecha de actualización.
+                </p>
+            </section>
+
+            <div class="text-center mt-5">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary px-4">
+                    <i class="bi bi-arrow-left-circle me-2"></i> Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

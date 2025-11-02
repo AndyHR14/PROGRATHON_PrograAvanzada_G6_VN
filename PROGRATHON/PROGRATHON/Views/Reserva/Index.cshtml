@@ -2,42 +2,189 @@
 
 @{
     ViewData["Title"] = "Reservas";
+    var total = Model?.Count() ?? 0;
+    var activas = Model?.Count(r => r.Activa) ?? 0;
 }
 
-<h2>Reservas</h2>
+<div class="container mt-4">
+    <!-- Encabezado + Toolbar -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+            <h2 class="mb-0 text-primary">Reservas</h2>
+            <small class="text-muted">
+                Total: <span class="badge bg-secondary">@total</span> • Activas: <span class="badge bg-success">@activas</span>
+            </small>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Crear" class="btn btn-primary">
+                <i class="bi bi-calendar-plus me-1"></i> Nueva reserva
+            </a>
+        </div>
+    </div>
 
-<p>
-    <a class="btn btn-primary" asp-action="Crear">Nueva Reserva</a>
-</p>
+    <!-- Filtros -->
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input id="filtroReservas" type="text" class="form-control" placeholder="Filtrar por usuario o laboratorio...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="soloActivas" checked>
+                        <label class="form-check-label" for="soloActivas">Mostrar solo activas</label>
+                    </div>
+                </div>
+                <div class="col-md-3 text-md-end">
+                    <span class="text-muted small">Escribe para filtrar y usa el switch para ver canceladas.</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Usuario</th>
-            <th>Laboratorio</th>
-            <th>Fecha y hora</th>
-            <th>Activa</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var r in Model)
-        {
-            <tr>
-                <td>@r.Usuario?.NombreUsuario</td>
-                <td>@r.Laboratorio?.NombreLab</td>
-                <td>@r.FechaYHora.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(r.Activa ? "Sí" : "No")</td>
-                <td>
-                    @if (r.Activa)
+    @if (total == 0)
+    {
+        <!-- Estado vacío -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-calendar-check display-5 text-secondary"></i>
+                </div>
+                <h5 class="fw-semibold mb-1">No hay reservas registradas</h5>
+                <p class="text-muted mb-4">Crea una nueva reserva para comenzar.</p>
+                <a asp-action="Crear" class="btn btn-primary">
+                    <i class="bi bi-calendar-plus me-1"></i> Crear reserva
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Tabla -->
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-nowrap">Usuario</th>
+                        <th>Laboratorio</th>
+                        <th class="text-nowrap">Fecha y hora</th>
+                        <th class="text-nowrap">Estado</th>
+                        <th class="text-end text-nowrap">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaReservas">
+                    @foreach (var r in Model.OrderByDescending(x => x.FechaYHora))
                     {
-                        <form asp-action="Cancelar" method="post" style="display:inline">
-                            <input type="hidden" name="id" value="@r.IDReserva" />
-                            <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
-                        </form>
+                        <tr data-activa="@r.Activa.ToString().ToLower()">
+                            <td class="fw-semibold">@r.Usuario?.NombreUsuario</td>
+                            <td>@r.Laboratorio?.NombreLab</td>
+                            <td class="text-nowrap">@r.FechaYHora.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                @if (r.Activa)
+                                {
+                                    <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Activa</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">Cancelada</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                @if (r.Activa)
+                                {
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalCancelar"
+                                            data-reserva-id="@r.IDReserva"
+                                            data-reserva-usuario="@r.Usuario?.NombreUsuario"
+                                            data-reserva-lab="@r.Laboratorio?.NombreLab"
+                                            data-reserva-fecha="@r.FechaYHora.ToString("yyyy-MM-dd HH:mm")">
+                                        <i class="bi bi-x-circle"></i> Cancelar
+                                    </button>
+                                }
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<!-- Modal de confirmación de cancelación -->
+<div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="modalCancelarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCancelarLabel">Confirmar cancelación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-1">¿Deseas cancelar la siguiente reserva?</p>
+                <ul class="list-unstyled small text-muted mb-0">
+                    <li><strong>Usuario:</strong> <span id="resUsuario"></span></li>
+                    <li><strong>Laboratorio:</strong> <span id="resLab"></span></li>
+                    <li><strong>Fecha y hora:</strong> <span id="resFecha"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <form id="formCancelar" asp-action="Cancelar" method="post" class="m-0">
+                    <input type="hidden" name="id" id="resId" />
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No, volver</button>
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i> Sí, cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Filtro por texto y por estado (solo activas)
+        (function () {
+            const qInput = document.getElementById('filtroReservas');
+            const onlyActive = document.getElementById('soloActivas');
+            const tbody = document.getElementById('tablaReservas');
+            if (!tbody) return;
+
+            function applyFilter() {
+                const q = (qInput?.value || '').toLowerCase();
+                const filterActive = !!(onlyActive?.checked);
+                for (const row of tbody.rows) {
+                    const usuario = (row.cells[0]?.innerText || '').toLowerCase();
+                    const lab = (row.cells[1]?.innerText || '').toLowerCase();
+                    const activa = row.getAttribute('data-activa') === 'true';
+
+                    const matchText = usuario.includes(q) || lab.includes(q);
+                    const matchState = filterActive ? activa : true;
+
+                    row.style.display = (matchText && matchState) ? '' : 'none';
+                }
+            }
+
+            qInput?.addEventListener('input', applyFilter);
+            onlyActive?.addEventListener('change', applyFilter);
+        })();
+
+        // Configurar modal de cancelación con datos de la fila
+        const modal = document.getElementById('modalCancelar');
+        if (modal) {
+            modal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-reserva-id');
+                const usuario = button.getAttribute('data-reserva-usuario');
+                const lab = button.getAttribute('data-reserva-lab');
+                const fecha = button.getAttribute('data-reserva-fecha');
+
+                document.getElementById('resId').value = id;
+                document.getElementById('resUsuario').textContent = usuario || '';
+                document.getElementById('resLab').textContent = lab || '';
+                document.getElementById('resFecha').textContent = fecha || '';
+            });
         }
-    </tbody>
-</table>
+    </script>
+}

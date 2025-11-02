@@ -1,50 +1,153 @@
 @model IEnumerable<PROGRATHON.Models.Usuario>
 
-    <h2>Usuario</h2>
-    <a name=""
-       id=""
-       class="btn btn-primary"
-       asp-action="Crear"
-       role="button">Crear</a>
+@{
+    ViewData["Title"] = "Usuarios";
+    var total = Model?.Count() ?? 0;
+    var profesores = Model?.Count(u => u.TipoUsuario) ?? 0;
+    var estudiantes = total - profesores;
+}
 
+<div class="container mt-4">
+    <!-- Encabezado + Toolbar -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+            <h2 class="mb-0 text-primary">Usuarios</h2>
+            <small class="text-muted">
+                Total: <span class="badge bg-secondary">@total</span>
+                • Profesores: <span class="badge bg-primary">@profesores</span>
+                • Estudiantes: <span class="badge bg-info text-dark">@estudiantes</span>
+            </small>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Crear" class="btn btn-primary">
+                <i class="bi bi-person-plus me-1"></i> Nuevo usuario
+            </a>
+        </div>
+    </div>
 
-    <div class="table-responsive">
-        <table class="table table-primary">
-            <thead>
-                <tr>
-                    <th scope="col">IDUsuario</th>
-                    <th scope="col">NombreUsuario</th>
-                    <th scope="col">TipoUsuario</th>
-                    <th scope="col">CorreoElectronico</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach( Usuario itemDato in Model)
-            {
-                @* tr=fila *@
-                <tr class="">
-                    @* td= columnas *@
-                    <td>@itemDato.IDUsuario</td>
-                    <td>@itemDato.NombreUsuario</td>
-                    <td>@itemDato.TipoUsuario</td>
-                    <td>@itemDato.CorreoElectronico</td>
-                </tr>
+    <!-- Filtros -->
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input id="filtroUsuarios" type="text" class="form-control" placeholder="Filtrar por nombre o correo...">
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="btn-group" role="group" aria-label="Filtro por tipo">
+                        <input type="radio" class="btn-check" name="filtroTipo" id="tipoTodos" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary" for="tipoTodos">Todos</label>
+
+                        <input type="radio" class="btn-check" name="filtroTipo" id="tipoEst" autocomplete="off">
+                        <label class="btn btn-outline-info" for="tipoEst">Estudiantes</label>
+
+                        <input type="radio" class="btn-check" name="filtroTipo" id="tipoProf" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="tipoProf">Profesores</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (total == 0)
+    {
+        <!-- Estado vacío -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-people display-5 text-secondary"></i>
+                </div>
+                <h5 class="fw-semibold mb-1">Aún no hay usuarios</h5>
+                <p class="text-muted mb-4">Registra tu primer usuario para comenzar.</p>
+                <a asp-action="Crear" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-1"></i> Crear usuario
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Tabla -->
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-nowrap">ID</th>
+                        <th>Nombre</th>
+                        <th class="text-nowrap">Tipo</th>
+                        <th>Correo</th>
+                        <th class="text-end text-nowrap">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaUsuarios">
+                    @foreach (var u in Model.OrderBy(x => x.NombreUsuario))
+                    {
+                        <tr data-tipo="@(u.TipoUsuario ? "profesor" : "estudiante")">
+                            <td class="text-muted">@u.IDUsuario</td>
+                            <td class="fw-semibold">@u.NombreUsuario</td>
+                            <td>
+                                @if (u.TipoUsuario)
+                                {
+                                    <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">Profesor</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">Estudiante</span>
+                                }
+                            </td>
+                            <td>@u.CorreoElectronico</td>
+                            <td class="text-end">
+                                <!-- Ajusta si tienes estas acciones -->
+                                <a asp-action="Editar" asp-route-id="@u.IDUsuario" class="btn btn-sm btn-outline-secondary me-1">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a asp-action="Detalles" asp-route-id="@u.IDUsuario" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-info-circle"></i> Detalles
+                                </a>
+                                <a asp-action="Eliminar" asp-route-id="@u.IDUsuario" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash3"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const qInput = document.getElementById('filtroUsuarios');
+            const tbody = document.getElementById('tablaUsuarios');
+            const rTodos = document.getElementById('tipoTodos');
+            const rEst = document.getElementById('tipoEst');
+            const rProf = document.getElementById('tipoProf');
+            if (!tbody) return;
+
+            function applyFilter() {
+                const q = (qInput?.value || '').toLowerCase();
+                const tipo = rEst?.checked ? 'estudiante' : (rProf?.checked ? 'profesor' : 'todos');
+
+                for (const row of tbody.rows) {
+                    const nombre = (row.cells[1]?.innerText || '').toLowerCase();
+                    const correo = (row.cells[3]?.innerText || '').toLowerCase();
+                    const rowTipo = row.getAttribute('data-tipo'); // 'estudiante' | 'profesor'
+
+                    const matchText = nombre.includes(q) || correo.includes(q);
+                    const matchType = (tipo === 'todos') ? true : (rowTipo === tipo);
+
+                    row.style.display = (matchText && matchType) ? '' : 'none';
+                }
             }
 
-                @*    <tr class="">
-                    <td scope="row">R1C1</td>
-                    <td>R1C2</td>
-                    <td>R1C3</td>
-                    <td>R1C2</td>
-                    <td>R1C3</td>
-                    </tr>
-                    <tr class="">
-                    <td scope="row">Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>R1C2</td>
-                    <td>R1C3</td>
-                    </tr> *@
-            </tbody>
-        </table>
-    </div>
+            qInput?.addEventListener('input', applyFilter);
+            rTodos?.addEventListener('change', applyFilter);
+            rEst?.addEventListener('change', applyFilter);
+            rProf?.addEventListener('change', applyFilter);
+        })();
+    </script>
+}
