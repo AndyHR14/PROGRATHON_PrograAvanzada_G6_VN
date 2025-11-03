@@ -11,7 +11,6 @@ namespace PROGRATHON.Data
         {
 
         }
-
         public DbSet<Laboratorio> Laboratorio { get; set; }
         public DbSet<Reserva> Reserva { get; set; }
         public DbSet<Usuario> Usuario { get; set; }

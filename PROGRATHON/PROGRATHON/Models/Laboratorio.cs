@@ -6,8 +6,14 @@ namespace PROGRATHON.Models
     {
         [Key]
         public int IDLab { get; set; }
-        public string NombreLab { get; set; }
+
+        public required string NombreLab { get; set; }
+
+        [Required]
         public int Capacidad { get; set; }
-        public string Responsable { get; set; }
+
+        [Required] 
+        public required string Responsable { get; set; }
+
     }
 }

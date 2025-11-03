@@ -17,7 +17,6 @@ namespace PROGRATHON.ViewModels
         [Display(Name = "Fecha y hora")]
         public DateTime FechaYHora { get; set; }
 
-        // Dropdowns
         public IEnumerable<SelectListItem>? Usuarios { get; set; }
         public IEnumerable<SelectListItem>? Laboratorios { get; set; }
     }
